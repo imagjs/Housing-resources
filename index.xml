@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <script>
+        <![CDATA[
+        $page.onload = function(){
+            set_transparent_height();
+            load_img();
+        }
+        function load_img(){
+            var img_sourse = 'http://www.imagapp.com/project/imag/imag-mh0719/data/homeJson.json';
+            $http.get(img_sourse,function(data){
+            //alert(data);
+                var img_list = JSON.parse(data);
+                var listJson = {items:[]};
+                var listData = img_list.data;
+                for(i=0;i<4;i++){
+                    $('recommend_img'+i).src = listData.recommend[i].src;
+                    $('selected_img'+i).src = listData.selected[i].src;
+                    $('hot_img'+i).src = listData.hot[i].src;
+                }
+                $('invite_img').src = listData.invite;
+            })
+        }
+        //根据手机屏幕参数设置透明栏高度
+        function set_transparent_height(){
+            var info = $phone.info();
+            var screenHeight = info['screenHeight'];
+            var density = info['density'];
+			var dp;
+			switch(density){
+				case 'mdpi':
+					dp = 1;
+					break;
+				case 'ldpi':
+					dp = 1.33;
+					break;
+				case 'hdpi':
+					dp = 1.5;
+					break;
+				case 'xhdpi':
+					dp = 2;
+					break;
+				case 'xxhdpi':
+					dp = 3;
+					break;
+				case 'xxxhdpi':
+					dp = 4;
+					break;
+			}
+            var transparent_row = parseInt(screenHeight - (22+52+104+30)*dp);//屏幕高度-标题栏高度-title高度
+            //alert('row高度为：'+transparent_row+'px;dp为：'+dp);
+            $('transparent_row').css('height',transparent_row+'px');
+        }
+        //content切换方法
+        function showContent(index){
+            $('slidingmenu').close();
+            $('contents').showContent(index);
+            switch(index){
+                case 0:
+                    $('title_label').text = '首页';
+                    break;
+                case 1:
+                    $('title_label').text = '收件箱';
+                    break;
+                case 2:
+                    $('title_label').text = '旅程';
+                    break;
+                case 3:
+                    $('title_label').text = '心愿单';
+                    break;
+            }
+        }
+        function feedback(){
+            $('slidingmenu').close();
+            $('popupmenu').open();
+        }
+		//产品类别选择
+		function openTypeList(){
+            $('popupmenu').close();
+			var typeList = $C('<actionmenu id="typeList" title="产品">'+
+			             '<item label="Guidebooks" onclick="changeProduct(\'GuideBooks\')"/>'+
+			             '<item label="Neighborhoods" onclick="changeProduct(\'Neighborhoods\')"/>'+
+			             '<item label="Search" onclick="changeProduct(\'Search\')"/>'+
+			             '<item label="Booking Flow" onclick="changeProduct(\'Booking Flow\')"/>'+
+			             '<item label="Hosting Tools" onclick="changeProduct(\'Hosting Tools\')"/>'+
+			             '<item label="Review Flow" onclick="changeProduct(\'Review Flow\')"/>'+
+			             '<item label="Messaging" onclick="changeProduct(\'Messaging\')"/>'+
+			             '<item label="Other" onclick="changeProduct(\'Other\')"/>'+
+			        '</actionmenu>');
+			typeList.open();
+		}
+        function changeProduct(text){
+            $('popupmenu').open();
+            $('product_label').text = text;
+        }
+        ]]>
+    </script>
+    <page>
+        <pathmenu position="bottomright" icon="search_menu.png" onclick="$page.open('search.xml')"/>
+        <popupmenu style="width:321" position="center" id="popupmenu">
+            <list type="transparent" style="background:#ffffff">
+                <item style="padding:19 22 0"><row><label style="font-size:18;color:#525658">发送反馈给我们</label></row></item>
+                <item style="padding:30 35">
+                    <row><label style="color:#55595b;font-size:16">向我们发送电子邮件，提交您对我们应用的反馈。</label></row>
+                    <row style="height:20"></row>
+                    <row><label style="color:#55595b;font-size:16">产品</label></row>
+                    <row><label style="color:#55595b;font-size:16;margin-left:7" onclick="openTypeList()" id="product_label">GuideBooks</label></row>
+                    <row><label style="color:#55595b;font-size:16">描述</label></row>
+                    <row><input type="text" style="color:#55595b;background:null,null"/></row>
+                    <row style="background:#ff5055;height:2"></row>
+                    <row style="height:46"></row>
+                    <row>
+                        <label style="color:#55595b;font-size:14;margin-right:26;align:right" onclick="$('popupmenu').close()">取消</label>
+                        <label style="color:#7a8186;font-size:14;align:right" onclick="$('popupmenu').close(),hint('发送成功')">发送反馈</label>
+                    </row>
+                </item>
+            </list>
+        </popupmenu>
+        <slidingmenu id="slidingmenu">
+            <item>
+                <content style="background:#ffffff">
+                    <list type="transparent">
+                        <item style="background:#ffffff;padding:19 0;col-width:84,*" onclick="$page.open('personal_info.xml')">
+                            <col><row><icon src="avatar.jpg" style="width:46;align:center" effect="round"/></row></col>
+                            <col>
+                                <row><label style="color:#565a5c;font-size:25">爱码哥</label></row>
+                                <row><label style="color:#787f84;font-size:13">imagapp@imag.cn</label></row>
+                            </col>
+                        </item>
+                        <item style="padding:0"><row style="height:1;background:#dadada"></row></item>
+                    </list>
+                    <list type="transparent" style="margin-top:8">
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="$page.open('search.xml')">
+                            <col><row><icon style="align:center" src="menu_search.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">搜索</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="showContent(0)">
+                            <col><row><icon style="align:center" src="menu_home.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">首页</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="showContent(1)">
+                            <col><row><icon style="align:center" src="menu_inbox.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">收件箱</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="showContent(2)">
+                            <col><row><icon style="align:center" src="menu_journey.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">旅程</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="showContent(3)">
+                            <col><row><icon style="align:center" src="menu_wish_list.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">心愿单</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="$page.open('personal_info.xml')">
+                            <col><row><icon style="align:center" src="menu_personal_info.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">个人资料</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="$page.open('setting.xml')">
+                            <col><row><icon style="align:center" src="menu_setting.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">设置</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="$page.open('help.xml')">
+                            <col><row><icon style="align:center" src="menu_help.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">帮助</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="$page.open('invite_friends.xml')">
+                            <col><row><icon style="align:center" src="menu_invite.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">邀请好友</label></row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:11 0;col-width:51,*" onclick="feedback()">
+                            <col><row><icon style="align:center" src="menu_feedback.png"/></row></col>
+                            <col><row><label style="color:#4d5153;margin-left:16">向我们反馈</label></row></col>
+                        </item>
+                    </list>
+                </content>
+                <footer>
+                    <list type="transparent">
+                        <item style="padding:0"><row style="height:1;background:#dadada"></row></item>
+                        <item style="background:#ffffff;padding:11 15" onclick="hint('该模式暂未开放')">
+                            <row><icon src="menu_switch.png"/><label style="color:#4d5153;margin-left:31">切换至出租模式</label></row>
+                        </item>
+                    </list>
+                </footer>
+            </item>
+            <item>
+                <title style="background:#ffffff;height:52">
+                    <left>
+                        <icon src="menu.png" style="margin-left:20" onclick="$('slidingmenu').open()"/>
+                        <label style="font-size:18;color:#3a3a3a;margin-left:32" id="title_label">首页</label>
+                    </left>
+                </title>
+                <contents id="contents">
+                    <content style="background:background.jpg">
+                        <list type="transparent">
+                            <item style="padding:0"><row id="transparent_row"></row></item>
+                            <item style="padding:25 82 30 16;background:#ffffff">
+                                <col>
+                                    <row><label style="font-size:26;color:#565a5c">你好！</label></row>
+                                    <row><label style="font-size:17;color:#474b4d">向当地房东预订房源，体验家一样的感觉。</label></row>
+                                </col>
+                            </item>
+                            <item style="padding:0 0 10;background:#ffffff">
+                                <row style="background:#e5e5e5;height:2px"></row>
+                                <row style="padding:29 15 20"><label style="font-size:21;color:#474b4d">假期好去处</label></row>
+                                <screens>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="recommend_img0" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">上海</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="recommend_img1" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">清迈</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="recommend_img2" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">大阪</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="recommend_img3" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">曼谷</label></row></item>
+                                        </list>
+                                    </screen>
+                                </screens>
+                            </item>
+                            <item style="padding:0 0 10;background:#ffffff">
+                                <row style="background:#e5e5e5;height:2px"></row>
+                                <row style="padding:29 15 20"><label style="font-size:21;color:#474b4d">精选</label></row>
+                                <screens>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="selected_img0" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10">
+                                                <row><label style="font-size:21;color:#474b4d">Dream of Shangrila</label></row>
+                                                <row><label style="font-size:16;color:#7e8589">9个房源</label></row>
+                                            </item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="selected_img1" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10">
+                                                <row><label style="font-size:21;color:#474b4d">人间瑶池 · 黄龙</label></row>
+                                                <row><label style="font-size:16;color:#7e8589">19个房源</label></row>
+                                            </item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="selected_img2" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10">
+                                                <row><label style="font-size:21;color:#474b4d">上有天堂，下有苏杭</label></row>
+                                                <row><label style="font-size:16;color:#7e8589">18个房源</label></row>
+                                            </item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279"><img id="selected_img3" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10">
+                                                <row><label style="font-size:21;color:#474b4d">Enjoy your business: Beijing</label></row>
+                                                <row><label style="font-size:16;color:#7e8589">26个房源</label></row>
+                                            </item>
+                                        </list>
+                                    </screen>
+                                </screens>
+                            </item>
+                            <item style="padding:0 0 10;background:#ffffff">
+                                <row style="background:#e5e5e5;height:2px"></row>
+                                <row style="padding:29 15 20"><label style="font-size:21;color:#474b4d">热门</label></row>
+                                <screens>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279;background:#ffa500"><img id="hot_img0" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">伦敦</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279;background:#c1ffc1"><img id="hot_img1" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">巴黎</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279;background:#9c9c9c"><img id="hot_img2" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">旧金山</label></row></item>
+                                        </list>
+                                    </screen>
+                                    <screen>
+                                        <list type="transparent">
+                                            <item style="padding:0 15"><row style="height:279;background:#ffbbff"><img id="hot_img3" style="width:110%"/></row></item>
+                                            <item style="padding:7 15 10"><row><label style="font-size:21;color:#474b4d">东京</label></row></item>
+                                        </list>
+                                    </screen>
+                                </screens>
+                            </item>
+                            <item style="padding:0"><row style="background:#e5e5e5;height:2px"></row></item>
+                            <item style="padding:0 15;background:#ffffff" onclick="$page.open('invite_friends.xml')">
+                                <row style="padding:29 0 20"><label style="font-size:21;color:#474b4d">邀请好友</label></row>
+                                <row style="height:279"><img id="invite_img" style="width:110%"/></row>
+                            </item>
+                            <item style="padding:7 15 60;background:#ffffff" onclick="$page.open('invite_friends.xml')">
+                                <row><label style="font-size:21;color:#474b4d">分享您对旅行的热爱！</label></row>
+                                <row><label style="font-size:16;color:#7e8589">邀请好友加入，你们都可以领取旅行基金。</label></row>
+                            </item>
+                        </list>
+                    </content>
+                    <content style="background:background_message.jpg">
+                        <list type="transparent">
+                            <item style="padding:21 16"><label style="color:#ffffff;font-size:25">消息</label></item>
+                        </list>
+                        <list type="transparent">
+                            <item style="margin:14;background:#ffffff;padding:19 42 14">
+                                <row><label style="color:#3f4143;font-szie:16;align:center">还没有收到消息</label></row>
+                                <row><label style="color:#999fa2;margin-top:20;font-size:14">找到自己喜欢的房源后，和房东取得联系。简单介绍一下自己，并告诉他们你此行的目的。</label></row>
+                                <row><button style="background:#ff5a5f;margin-top:16;height:44;width:146;font-size:15;color:#ffffff;align:center">开始探索</button></row>
+                            </item>
+                        </list>
+                    </content>
+                    <content style="background:#ffffff">
+                        <list type="transparent">
+                            <item style="padding:0"><row style="height:1px;background:#b3b4b3"></row></item>
+                            <item style="padding:0"><row style="height:1px;background:#c5c5c5"></row></item>
+                            <item style="padding:6 0;background:#dfe0df"><row><label style="color:#464a4d;font-size:17;align:center">即将开始的行程</label></row></item>
+                            <item style="padding:32 30">
+                                <row><label style="font-size:24;color:#3a3a3a;align:center">没有即将开始的旅程</label></row>
+                                <row style="height:15"></row>
+                                <row><label style="color:#90969a;font-size:16;align:center">如果您为旅程预订了住宿，您将会在这里看到您的行程单。</label></row>
+                                <row style="height:15"></row>
+                                <row><button style="background:#ff5a5f;color:#ffffff;font-size:17;height:43;width:146;align:center">开始探索</button></row>
+                            </item>
+                            <item style="padding:0"><row style="height:2px;background:#dcdcdc"></row></item>
+                        </list>
+                    </content>
+                    <content style="background:#ffffff">
+                        <list type="trnasparent">
+                            <item style="padding:0;height:300;background:background_wish_list.jpg">
+                                <row><label style="color:#ffffff;font-size:26;align:center">手机收藏</label></row>
+                                <row style="height:22"></row>
+                                <row><label style="padding:15 28;background:#b4a76c;color:#ffffff;font-size:15;align:center">0个房源·私密</label></row>
+                            </item>
+                            <item style="padding:0"><row style="background:#788084;height:1"></row></item>
+                        </list>
+                    </content>
+                </contents>
+            </item>
+        </slidingmenu>
+    </page>
+</imag>
