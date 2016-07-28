@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <page>
+        <title style="background:#ffffff;height:52">
+            <left>
+                <icon src="back_gray.png" style="margin-left:20" onclick="$('slidingmenu').open()"/>
+                <label style="font-size:18;color:#3a3a3a;margin-left:32" id="title_label">设置</label>
+            </left>
+        </title>
+        <content style="background:#f5f6f5">
+            <list type="transparent">
+                <item style="padding:0"><row style="height:1px;background:#cbcbcb"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">通知</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">货币</label><label style="font-size:15;color:#ff555a;align:right">USD</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">关于</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">高级设置</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">发送反馈</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+                <item style="padding:21 15">
+                    <row><label style="font-size:15;color:#44484a">退出</label></row>
+                </item>
+                <item style="padding:0"><row style="height:2px;background:#e1e2e1"></row></item>
+            </list>
+        </content>
+    </page>
+</imag>
