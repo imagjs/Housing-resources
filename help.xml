@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <page>
+        <title style="background:#ffffff;height:52">
+            <left>
+                <icon src="back_gray.png" style="margin-left:20" onclick="$page.close()"/>
+                <label style="font-size:18;color:#3a3a3a;margin-left:32">帮助</label>
+            </left>
+        </title>
+        <content>
+            <web src="https://zh.airbnb.com/help" progress="true"></web>
+        </content>
+    </page>
+</imag>
